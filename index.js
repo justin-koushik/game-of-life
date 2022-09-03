@@ -1,5 +1,6 @@
 const can=document.querySelector('canvas')
 const ctx=can.getContext("2d")
+const fpsSelector=document.querySelector("#fps")
 const w=500
 const h=500
 can.width=w
@@ -10,8 +11,11 @@ class main{
         this.dx=dx
         this.nrows=w/dx
         this.ncols=h/dx
-        this.board=new Array(this.nrows).fill(0).map((e)=>new Array(this.ncols).fill(0))
         this.state=false
+        this.reset()
+    }
+    reset(){
+        this.board=new Array(this.nrows).fill(0).map((e)=>new Array(this.ncols).fill(0))
     }
     countChildren(r,c){
         let nchild=0
@@ -25,9 +29,6 @@ class main{
                 }
             }
         }
-        // if(this.board[r][c] && (r==0 || r===this.nrows-1 || c===0 || c===this.ncols-1)){
-        //     nchild+=3
-        // }
         return nchild
     }
     nextStep(){
@@ -137,11 +138,13 @@ document.onkeydown=(key)=>{
     }
 }
 let then,now,elapsed
-const fps=10
-const frameInterval=1000/fps
+let fps=fpsSelector.value
+let frameInterval=1000/fps
+fpsSelector.onchange=()=>{
+    fps=fpsSelector.value
+    frameInterval=1000/fps
+}
 then=Date.now()
-
-
 const render=()=>{
     requestAnimationFrame(render)
     now=Date.now()
